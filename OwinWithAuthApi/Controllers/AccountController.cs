@@ -52,7 +52,7 @@ namespace OwinWithAuthApi.Controllers
                     Connection = "Username-Password-Authentication",
                     ClientId = ConfigurationManager.AppSettings["auth0:ClientId"],
                     Scope = "openid name email",
-                    Username = model.Email,
+                    Username = model.Username,
                     Password = model.Password
                 });
 
@@ -67,7 +67,8 @@ namespace OwinWithAuthApi.Controllers
                 AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = false }, identity);
 
                 // Redirect to return URL (of specified)
-                return RedirectToLocal(returnUrl);
+                TempData["User"] = user.UserName;
+                return RedirectToAction("HomePage", TempData["User"]);
             }
             catch (Exception e)
             {
